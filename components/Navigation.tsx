@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -7,61 +8,60 @@ import styled from "styled-components";
 
 type Props = {
   isNavOpen: boolean;
+  closeNav: () => void;
 };
 
-export default function Navigation({ isNavOpen }: Props) {
+const links = [
+  { href: "/", text: "Home" },
+  { href: "/services", text: "Services" },
+  { href: "/gallery/individual-monuments", text: "Gallery" },
+  { href: "/about", text: "About" },
+  { href: "/staff", text: "Staff" },
+  { href: "/contact", text: "Contact" },
+];
+
+export default function Navigation({ isNavOpen, closeNav }: Props) {
   const pathname = usePathname();
-  const galleryIsActive = pathname.split("/").includes("gallery");
+  const prevPathRef = useRef(pathname);
+
+  useEffect(() => {
+    // Only run when pathname changes, not on initial render
+    if (prevPathRef.current !== pathname) {
+      // Close menu after navigation is complete
+      closeNav();
+
+      // Smooth scroll to top of page
+      window.scrollTo({ top: 0 });
+
+      // Update the previous pathname reference
+      prevPathRef.current = pathname;
+    }
+  }, [pathname, closeNav]);
 
   return (
     <NavigationStyles className={isNavOpen ? "open" : ""}>
       <nav id="nav-menu">
         <ul>
-          <li>
-            <Link href="/" className={pathname === "/" ? "active" : ""}>
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/services"
-              className={pathname === "/services" ? "active" : ""}
-            >
-              Services
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/gallery/individual-monuments"
-              className={galleryIsActive ? "active" : ""}
-            >
-              Gallery
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/about"
-              className={pathname === "/about" ? "active" : ""}
-            >
-              About
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/staff"
-              className={pathname === "/staff" ? "active" : ""}
-            >
-              Staff
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/contact"
-              className={pathname === "/contact" ? "active" : ""}
-            >
-              Contact
-            </Link>
-          </li>
+          {links.map(({ href, text }) => (
+            <li key={href}>
+              <Link
+                href={href}
+                onClick={() => {
+                  if (pathname === href) {
+                    closeNav();
+                  }
+                }}
+                className={
+                  pathname === href ||
+                  (text === "Gallery" && pathname.includes("gallery"))
+                    ? "active"
+                    : ""
+                }
+              >
+                {text}
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
       <div className="store-hours">
@@ -165,11 +165,14 @@ const NavigationStyles = styled.div`
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        color: #fff;
         line-height: 1;
         text-decoration: none;
         border-bottom: 1px solid #1f1d18;
         transition: color 200ms ease-in-out;
+
+        &.active {
+          color: #4da7bc;
+        }
       }
     }
 

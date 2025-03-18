@@ -51,7 +51,10 @@ export default function Header() {
             <span className="sr-only">Navigation Menu</span>
           </button>
         </div>
-        <Navigation isNavOpen={isNavOpen} />
+        <Navigation
+          isNavOpen={isNavOpen}
+          closeNav={() => setIsNavOpen(false)}
+        />
       </div>
     </HeaderStyles>
   );
