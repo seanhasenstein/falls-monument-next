@@ -171,7 +171,7 @@ const NavigationStyles = styled.div`
         transition: color 200ms ease-in-out;
 
         &.active {
-          color: #4da7bc;
+          color: #678cbf;
         }
       }
     }
