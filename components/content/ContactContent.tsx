@@ -75,8 +75,14 @@ export default function ContactContent() {
               />
             </div>
             <div className="form-item sr-only">
-              <label htmlFor="honey">Please leave this field blank</label>
-              <input id="honey" tabIndex={-1} />
+              <label htmlFor="companyName">Company Name</label>
+              <input
+                id="companyName"
+                name="companyName"
+                tabIndex={-1}
+                autoComplete="off"
+                defaultValue={state?.companyName}
+              />
             </div>
             <button
               type="submit"

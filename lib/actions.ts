@@ -12,6 +12,7 @@ export type FormState = {
   customerName: string | null;
   email: string | null;
   phone: string | null;
+  companyName: string | null;
   message: string | null;
 } | null;
 
@@ -24,6 +25,20 @@ async function sendContactMessage(
   const email = formData.get("email") as string;
   const phone = formData.get("phone") as string;
   const message = formData.get("message") as string;
+  const honeypot = formData.get("companyName") as string;
+
+  // Check honeypot field to prevent spam
+  if (honeypot) {
+    return {
+      error: "",
+      customerName: "",
+      email: "",
+      phone: "",
+      message: "",
+      companyName: "",
+    };
+  }
+
   try {
     const formattedMessage = {
       id: messageId,
@@ -56,6 +71,7 @@ async function sendContactMessage(
       email,
       phone,
       message,
+      companyName: "",
     };
   }
   redirect("/contact/success");
