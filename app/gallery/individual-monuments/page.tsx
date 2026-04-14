@@ -6,6 +6,8 @@ import Gallery from "@/components/Gallery";
 
 export const metadata: Metadata = {
   title: "Individual Monuments Gallery | Falls Monument | (920) 467-4939",
+  description:
+    "Browse our gallery of individual monuments to find design inspiration for a lasting memorial that honors your loved one.",
 };
 
 export default async function IndividualGalleryPage() {

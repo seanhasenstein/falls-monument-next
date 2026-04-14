@@ -6,6 +6,8 @@ import Gallery from "@/components/Gallery";
 
 export const metadata: Metadata = {
   title: "Granite Colors Gallery | Falls Monument | (920) 467-4939",
+  description:
+    "Explore the variety of granite colors available for your monument, from classic grays and blacks to rich reds and blues.",
 };
 
 export default async function GraniteColorsGalleryPage() {
