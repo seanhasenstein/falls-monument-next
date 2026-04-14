@@ -18,7 +18,7 @@ export type FormState = {
 
 async function sendContactMessage(
   _prevState: FormState | null,
-  formData: FormData
+  formData: FormData,
 ) {
   const messageId = createMessageId();
   const customerName = formData.get("customerName") as string;
@@ -27,15 +27,21 @@ async function sendContactMessage(
   const message = formData.get("message") as string;
   const honeypot = formData.get("companyName") as string;
   const formLoadTime = Number(formData.get("formLoadTime"));
-  const elapsedMs = Date.now() - formLoadTime;
+  const elapsed = Date.now() - formLoadTime;
 
   // Silently drop honeypot hits
   if (honeypot) {
+    console.warn(
+      `Spam bot detected submitting contact form. Honeypot value: ${honeypot}`,
+    );
     redirect("/contact/success");
   }
 
   // Silently drop suspiciously fast submissions
-  if (!formLoadTime || elapsedMs < 2000) {
+  if (!formLoadTime || elapsed < 2000) {
+    console.warn(
+      `Spam bot detected submitting contact form. Elapsed time: ${elapsed}ms`,
+    );
     redirect("/contact/success");
   }
 
@@ -44,7 +50,7 @@ async function sendContactMessage(
   if (wordCount < 2) {
     return {
       error:
-        "Could you share a little more detail about how we can help? A short sentence or two is perfect.",
+        "Please provide a more detailed message so we can better assist you.",
       customerName,
       email,
       phone,
