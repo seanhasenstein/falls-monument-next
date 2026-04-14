@@ -6,6 +6,8 @@ import Gallery from "@/components/Gallery";
 
 export const metadata: Metadata = {
   title: "Companion Monuments Gallery | Falls Monument | (920) 467-4939",
+  description:
+    "Browse our gallery of companion monuments designed to honor couples and loved ones side by side.",
 };
 
 export default async function CompanionGalleryPage() {
