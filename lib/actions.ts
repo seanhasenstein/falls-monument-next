@@ -26,15 +26,29 @@ async function sendContactMessage(
   const phone = formData.get("phone") as string;
   const message = formData.get("message") as string;
   const honeypot = formData.get("companyName") as string;
+  const formLoadTime = Number(formData.get("formLoadTime"));
+  const elapsedMs = Date.now() - formLoadTime;
 
-  // Check honeypot field to prevent spam
+  // Silently drop honeypot hits
   if (honeypot) {
+    redirect("/contact/success");
+  }
+
+  // Silently drop suspiciously fast submissions
+  if (!formLoadTime || elapsedMs < 2000) {
+    redirect("/contact/success");
+  }
+
+  // Require more than a single word in the message
+  const wordCount = message.trim().split(/\s+/).filter(Boolean).length;
+  if (wordCount < 2) {
     return {
-      error: "",
-      customerName: "",
-      email: "",
-      phone: "",
-      message: "",
+      error:
+        "Could you share a little more detail about how we can help? A short sentence or two is perfect.",
+      customerName,
+      email,
+      phone,
+      message,
       companyName: "",
     };
   }
